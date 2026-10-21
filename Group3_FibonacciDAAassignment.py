@@ -137,3 +137,15 @@ def plot_results(results_a, results_b):
         print("• Formula Proof: calls(n) = 2 * F(n+1) - 1 (Exponential O(phi^n))")
         print("• Complexity: Algo A is Exponential O(2^n); Algo B is Linear O(n).")
         print("• n = 1000 Estimate for Algo A: ~4.34 * 10^208 calls (Infeasible, >10^194 years).\n")
+        # ==============================================================================
+# PART 4: RECURSION LIMIT FIXES & EDGE CASE ANALYSIS
+# Scope: Handle recursion depth errors, propose fixes, and analyze `if fibtable[n]` check.
+# ==============================================================================
+
+def run_part4():
+    print("--- PART 4: RECURSION LIMIT & EDGE CASES ---")
+    print("• Default Failure: sys.getrecursionlimit() is 1000, causing RecursionError at n=1000.")
+    print("• Fix 1: sys.setrecursionlimit(3000) (Risk: C-stack overflow if depth too high).")
+    print("• Fix 2: Bottom-up iterative tabulation (Eliminates stack overhead entirely).")
+    print("• Edge Case Check ('if fibtable[n]:'): For n=0, fibtable[0]=0 evaluates to False in Python.")
+    print("  Correction: Use explicit 'if n in fibtable:' to prevent redundant base recomputations.\n")
