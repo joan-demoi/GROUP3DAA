@@ -124,3 +124,16 @@ def plot_results(results_a, results_b):
         root.mainloop()
     except Exception as e:
         print(f"\nPlotting skipped (headless environment detected): {e}")
+
+
+    # ==============================================================================
+    # PART 3: MATHEMATICAL ANALYSIS & RECURRENCE SUMMARY
+    # Scope: Print analytical recurrences, complexity classes, and n=1000 estimates.
+    # ==============================================================================
+    
+    def print_analysis():
+        print("--- PART 3: MATHEMATICAL ANALYSIS ---")
+        print("• Recurrences: T_A(n) = 1 + T_A(n-1) + T_A(n-2) | T_B(n) = 2n - 1")
+        print("• Formula Proof: calls(n) = 2 * F(n+1) - 1 (Exponential O(phi^n))")
+        print("• Complexity: Algo A is Exponential O(2^n); Algo B is Linear O(n).")
+        print("• n = 1000 Estimate for Algo A: ~4.34 * 10^208 calls (Infeasible, >10^194 years).\n")
