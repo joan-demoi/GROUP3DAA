@@ -1,0 +1,26 @@
+# ==============================================================================
+# PART 5: CONCLUSION & MAIN EXECUTION DRIVER
+# Scope: Written summary on efficiency and overlapping subproblems, plus main driver.
+# ==============================================================================
+
+def print_conclusion():
+    print("--- PART 5: CONCLUSION ---")
+    print(
+        "Algorithm B is infinitely more efficient than Algorithm A as n approaches 1000, "
+        "reducing calls from 10^208 to 1,999 and execution time from millennia to <1ms.\n"
+        "Principle: Overlapping Subproblems. Memoization caches computed states in a table, "
+        "converting a redundant exponential call tree into an instantaneous O(1) Directed Acyclic Graph."
+    )
+
+
+def main():
+    verify_base_equivalence()
+    res_a, res_b = run_experiments()
+    plot_results(res_a, res_b)
+    print_analysis()
+    run_part4()
+    print_conclusion()
+
+
+if __name__ == "__main__":
+    main()
