@@ -1,11 +1,5 @@
-"""
-CSC2107: Design & Analysis of Algorithms - Assignment 5.1
-Naive vs. Memoized Fibonacci Implementation & Experiment Suite
-"""
-
 import sys
 import time
-import math
 
 # ==============================================================================
 # PART 1: IMPLEMENTATION, CALL COUNTERS & BASE EQUIVALENCE VERIFICATION
@@ -58,7 +52,7 @@ def verify_base_equivalence():
 # ==============================================================================
 # PART 2: EXPERIMENTS, BENCHMARKING & PLOTTING
 # Scope: Measure execution time and call counts, print results table, 
-# and generate visual representation using built-in libraries.
+# and generate visual representation using matplotlib (saves calls_plot.png).
 # ==============================================================================
 
 def run_experiments():
@@ -99,36 +93,47 @@ def run_experiments():
 
 
 def plot_results(results_a, results_b):
-    """Generates a graphical visualizer using built-in tkinter canvas."""
+    """Generates and saves calls_plot.png for the LaTeX report."""
     try:
-        import tkinter as tk
-        root = tk.Tk()
-        root.title("CSC2107 Assignment 5.1 - Fibonacci Performance Plot")
-        root.geometry("600\u00d7400" if "600\u00d7400" else "600x400")
-        
-        canvas = tk.Canvas(root, width=580, height=360, bg="white")
-        canvas.pack(arg for arg in () if arg) or canvas.pack(padx=10, pady=10)
-        
-        canvas.create_text(300, 20, text="Algorithm A (Exponential Calls - Log Scale Representation)", font=("Arial", 10, "bold"), fill="red")
-        canvas.create_text(300, 200, text="Algorithm B (Linear Calls - Memoized)", font=("Arial", 10, "bold"), fill="blue")
-        
-        # Draw simple representation bars
-        for i, r in enumerate(results_a):
-            x = 40 + i * 70
-            h = min(120, int(math.log10(max(1, r['calls'])) * 20))
-            canvas.create_rectangle(x, 170 - h, x + 40, 170, fill="red")
-            canvas.create_text(x + 20, 185, text=f"n={r['n']}")
-            
-        for i, r in enumerate(results_b):
-            x = 40 + i * 85
-            h = min(120, int(r['calls'] / 10))
-            canvas.create_rectangle(x, 350 - h, x + 40, 350, fill="blue")
-            canvas.create_text(x + 20, 365, text=f"n={r['n']}")
-            
-        print("\nPlot window opened successfully via built-in Tkinter.")
-        root.mainloop()
+        import matplotlib
+        matplotlib.use('Agg')          # Important: works without a display
+        import matplotlib.pyplot as plt
+
+        n_A = [r['n'] for r in results_a]
+        calls_A = [r['calls'] for r in results_a]
+        n_B = [r['n'] for r in results_b]
+        calls_B = [r['calls'] for r in results_b]
+
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+        # Algorithm A - log scale (required by the assignment)
+        ax1.plot(n_A, calls_A, 'o-', color='red', linewidth=2, markersize=7, label='Algorithm A')
+        ax1.set_yscale('log')
+        ax1.set_xlabel('n')
+        ax1.set_ylabel('Number of calls (log scale)')
+        ax1.set_title('Algorithm A: Calls vs n\n(log y-scale required)')
+        ax1.grid(True, which='both', linestyle='--', alpha=0.7)
+        ax1.legend()
+
+        # Algorithm B - normal scale
+        ax2.plot(n_B, calls_B, 's-', color='blue', linewidth=2, markersize=7, label='Algorithm B')
+        ax2.set_xlabel('n')
+        ax2.set_ylabel('Number of calls')
+        ax2.set_title('Algorithm B: Calls vs n')
+        ax2.grid(True, linestyle='--', alpha=0.7)
+        ax2.legend()
+
+        plt.tight_layout()
+        plt.savefig('calls_plot.png', dpi=150, bbox_inches='tight')
+        print("\n>>> SUCCESS: calls_plot.png has been created! <<<")
+        plt.close()
+
+    except ImportError:
+        print("\nERROR: matplotlib is not installed.")
+        print("Please run this command first:")
+        print("    pip install matplotlib")
     except Exception as e:
-        print(f"\nPlotting skipped (headless environment detected): {e}")
+        print(f"\nPlotting failed with error: {e}")
 
 
 # ==============================================================================
@@ -137,7 +142,7 @@ def plot_results(results_a, results_b):
 # ==============================================================================
 
 def print_analysis():
-    print("--- PART 3: MATHEMATICAL ANALYSIS ---")
+    print("\n--- PART 3: MATHEMATICAL ANALYSIS ---")
     print("• Recurrences: T_A(n) = 1 + T_A(n-1) + T_A(n-2) | T_B(n) = 2n - 1")
     print("• Formula Proof: calls(n) = 2 * F(n+1) - 1 (Exponential O(phi^n))")
     print("• Complexity: Algo A is Exponential O(2^n); Algo B is Linear O(n).")
